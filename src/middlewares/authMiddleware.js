@@ -19,7 +19,8 @@ const authenticateToken = (req, res, next) => {
     jwt.verify(token, secretKey, (err, user) => {
         if(err) {
             return res.status(403).json({
-                data: secretKey,
+                secretKey,
+                token,
                 message: "Forbidden: Invalid token",
             })
         }
