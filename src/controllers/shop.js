@@ -141,37 +141,13 @@ const addReview = async (req, res, next) => {
     }
 }
 
-const editReview = async (req, res, next) => {
-    try {
-        const { goods_id, review_id } = req.params;
-        const { ...fields } = req.body;
-        const newData = {};
-        const oldData = await Shop.findOne({ _id: goods_id, "review._id": review_id }, { "review.$": 1 });
-        Object.entries(fields).forEach(([key, value]) => {
-            return newData[`review.$.${key}`] = value;
-        })
-
-        if(req.files?.review_img) {
-            newData["review.$.review_img"] = req.files.review_img[0].path;
-            await deleteImage(oldData.review[0].review_img);
-        }
-
-        const updatedReview = await Shop.findOneAndUpdate({_id: goods_id, "review._id": review_id}, { $set: newData }, { new: true });
-
-        res.status(200).json({
-            message: "Review successfully updated",
-            updatedReview
-        });
-    } catch(error) {
-        next(new AppError(error.message, 500));
-    }
-}
-
 const deleteReview = async (req, res, next) => {
     try {
         const { goods_id, review_id } = req.params;
         const deleteData = await Shop.findOne({ _id: goods_id, "review._id": review_id }, { "review.$": 1 });
-        await deleteImage(deleteData.review[0].review_img);
+        if(deleteData.review?.review_img) {
+            await deleteImage(deleteData.review[0].review_img);
+        }
     
         const deletedReview = await Shop.findByIdAndUpdate(goods_id, { $pull: {
             review: {
@@ -187,4 +163,4 @@ const deleteReview = async (req, res, next) => {
     }
 }
 
-module.exports = { addGoods, getGoods, getGoodsDataById, deleteGoodsData, editGoodsData, addReview, editReview, deleteReview };
+module.exports = { addGoods, getGoods, getGoodsDataById, deleteGoodsData, editGoodsData, addReview, deleteReview };
