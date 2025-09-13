@@ -159,7 +159,7 @@ const deleteReview = async (req, res, next) => {
             deletedReview
         });
     } catch(error) {
-        next(new AppError("Review failed to delete"))
+        next(new AppError(error.message, 500));
     }
 }
 
