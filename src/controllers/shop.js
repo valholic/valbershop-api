@@ -148,12 +148,9 @@ const deleteReview = async (req, res, next) => {
         if(deleteData.review?.review_img) {
             await deleteImage(deleteData.review[0].review_img);
         }
-    
-        const deletedReview = await Shop.findByIdAndUpdate(goods_id, { $pull: {
-            review: {
-                _id: review_id
-            }
-        } }, {new: true, runValidators: true});
+
+        const deletedReview = await Shop.findByIdAndUpdate(goods_id, { $pull: { review: { _id: review_id }}}, { new: true });
+
         res.status(200).json({
             message: "This review is already deleted",
             deletedReview
