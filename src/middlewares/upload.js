@@ -14,11 +14,10 @@ const fileStorage = multer.diskStorage({
             cb(null, 'public/images/gallery');
         } else if(file.fieldname === "image") {
             switch(req.body.type) {
-                case "Product": 
+                case "product": 
                     cb(null, 'public/images/products');
                     break;
-
-                case "Service":
+                case "service":
                     cb(null, 'public/images/services');
                     break;
             }

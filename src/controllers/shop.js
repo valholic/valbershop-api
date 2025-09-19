@@ -8,7 +8,7 @@ const addGoods = async (req, res, next) => {
         const image = req.files.image.map(img => {
             return img.path;
         });
-    
+
         const newGoods = await new Shop({
             name,
             image,
@@ -109,7 +109,7 @@ const editGoodsData = async (req, res, next) => {
             updatedData
         });
     } catch (error) {
-        next(new AppError(error.message));
+        next(new AppError("Failed to update goods data", 500));
     }
 }
 
