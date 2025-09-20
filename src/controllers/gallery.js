@@ -1,6 +1,5 @@
 const Gallery = require('../models/gallery');
 const AppError = require('../utils/appError');
-const deleteImage = require('../utils/deleteImage');
 
 const addPhoto = async (req, res, next) => {
     try {
@@ -42,7 +41,7 @@ const deletePhoto = async (req, res, next) => {
         });
 
         for(const photo of photos) {
-            await deleteImage(photo.photo);
+            await cloudinary.uploader.destroy(photo);
         }
 
         const deletedPhoto = await Gallery.deleteMany({
