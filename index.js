@@ -34,10 +34,7 @@ app.use('/v1/gallery', galleryRoute);
 app.use('/v1/shop', shopRoute);
 app.use('/v1/testimony', testimonyRoute);
 
-connectDB().then(() => {
-    // create admin account
-    createAdminAccount();
-})
+createAdminAccount();
 
 // Error handle
 app.use(handleError);
