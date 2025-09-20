@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 // parser & cors set-up
 app.use(express.json());
+app.use(cors());
 
 // Routes field
 const signupRoute = require('./src/routes/signup');
