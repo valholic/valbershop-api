@@ -1,21 +1,24 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-// const connectDB = require('./src/config/dbConfig');
+const path = require('path');
+const connectDB = require('./src/config/dbConfig');
 const createAdminAccount = require('./src/script/admin');
 const handleError = require('./src/middlewares/handleError');
 
 const app = express();
-// const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // parser & cors set-up
-app.use(cors({
-    origin: "https://valholic.github.io",
-    methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(express.json());
 
-app.options("*", cors());
+// CORS Error Handle
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
 
 // Routes field
 const signupRoute = require('./src/routes/signup');
@@ -38,11 +41,8 @@ createAdminAccount();
 // Error handle
 app.use(handleError);
 
-module.exports = app;
-
-// Production stage
-// connectDB().then(() => {
-//     app.listen(PORT, () => {
-//         console.log(`Server is running at http://localhost:${PORT}`);
-//     });
-// });
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running at http://localhost:${PORT}`);
+    });
+});
