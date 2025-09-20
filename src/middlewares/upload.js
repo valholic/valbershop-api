@@ -1,35 +1,41 @@
 const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 
-const fileFilter = (req, file, cb) => {
-    if(file.mimetype === "image/jpg" || file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "image/webp") {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-};
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-const fileStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
+const storage = new CloudinaryStorage({
+    cloudinary,
+    params: async (req, file) => {
+        let folder = '';
+
         if(file.fieldname === "photo") {
-            cb(null, 'public/images/gallery');
+            folder = 'gallery';
         } else if(file.fieldname === "image") {
             switch(req.body.type) {
                 case "product": 
-                    cb(null, 'public/images/products');
+                    folder = 'products';
                     break;
                 case "service":
-                    cb(null, 'public/images/services');
+                    folder = 'services';
                     break;
             }
         } else if(file.fieldname === "review_img") {
-            cb(null, 'public/images/reviewImages');
+            folder = 'reviewImages'
         }
-    },
-    filename: (req, file, cb) => {
-        cb(null, new Date().getTime() + '-' + file.originalname);
-    }
-});
 
-const upload = multer({storage: fileStorage, fileFilter});
+        return {
+            folder,
+            allowed_format: ['jpg', 'jpeg', 'png', 'webp'],
+            public_id: new Date().getTime() + '-' + file.originalname.split('.')[0]
+        }
+    }}
+);
+
+const upload = multer({ storage });
 
 module.exports = upload;

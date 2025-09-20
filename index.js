@@ -4,17 +4,10 @@ const cors = require('cors');
 const path = require('path');
 const connectDB = require('./src/config/dbConfig');
 const createAdminAccount = require('./src/script/admin');
-const cleanOrphan = require('./src/script/cleanOrphan');
 const handleError = require('./src/middlewares/handleError');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Set up akses image
-app.use('/public/images/gallery', express.static(path.join(__dirname, '/public/images/gallery')));
-app.use('/public/images/products', express.static(path.join(__dirname, '/public/images/products')));
-app.use('/public/images/services', express.static(path.join(__dirname, '/public/images/services')));
-app.use('/public/images/reviewImages', express.static(path.join(__dirname, '/public/images/reviewImages')));
 
 // parser & cors set-up
 app.use(express.json());
@@ -37,9 +30,6 @@ app.use('/v1/testimony', testimonyRoute);
 
 // create admin account
 createAdminAccount();
-
-// clean orphan image files
-cleanOrphan();
 
 // Error handle
 app.use(handleError);

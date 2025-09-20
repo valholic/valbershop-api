@@ -1,6 +1,6 @@
 const Shop = require('../models/shop');
 const AppError = require('../utils/appError');
-const deleteImage = require('../utils/deleteImage');
+const cloudinary = require('cloudinary').v2;
 
 const addGoods = async (req, res, next) => {
     try {
@@ -60,7 +60,7 @@ const deleteGoodsData = async (req, res, next) => {
         const { goods_id } = req.params; 
         const goodsImages = await Shop.findById(goods_id);
         for(const image of goodsImages.image) {
-            await deleteImage(image);
+            await cloudinary.uploader.destroy(image);
         }
         
         const deletedGoods = await Shop.findByIdAndDelete(goods_id);
@@ -94,7 +94,7 @@ const editGoodsData = async (req, res, next) => {
 
         for(const image of savedImages.image) {
             if(!fields.image.includes(image)) {
-                await deleteImage(image);
+                await cloudinary.uploader.destroy(image);
             }
         }
 
@@ -146,7 +146,7 @@ const deleteReview = async (req, res, next) => {
         const { goods_id, review_id } = req.params;
         const deleteData = await Shop.findOne({ _id: goods_id, "review._id": review_id }, { "review.$": 1 });
         if(deleteData.review?.review_img) {
-            await deleteImage(deleteData.review[0].review_img);
+            await cloudinary.uploader.destroy(image);
         }
 
         const deletedReview = await Shop.findByIdAndUpdate(goods_id, { $pull: { review: { _id: review_id }}}, { new: true });
