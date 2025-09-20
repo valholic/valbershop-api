@@ -11,7 +11,9 @@ const PORT = process.env.PORT || 3000;
 
 // parser & cors set-up
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "https://valholic.github.io"
+}));
 
 // Routes field
 const signupRoute = require('./src/routes/signup');
@@ -33,7 +35,6 @@ createAdminAccount();
 
 // Error handle
 app.use(handleError);
-
 
 connectDB().then(() => {
     app.listen(PORT, () => {
