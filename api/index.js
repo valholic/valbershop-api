@@ -1,6 +1,7 @@
-import app from "../index";
 import serverless from "serverless-http";
 import connectDB from "../src/config/dbConfig";
+
+const app = require("../index");
 
 let isConnected = false;
 
