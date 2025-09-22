@@ -30,7 +30,7 @@ const getMe = async (req, res, next) => {
 
 const addHistory = async (req, res, next) => {
     try {
-        const { name, goods_id, type, amount, date, hour, price } = req.body;
+        const { name, goods_id, type, amount, date, hour, price, discount } = req.body;
         const check_out_time = new Date().toLocaleString();
         const history = {
             name,
