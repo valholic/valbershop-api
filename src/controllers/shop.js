@@ -4,7 +4,7 @@ const cloudinary = require('cloudinary').v2;
 
 const addGoods = async (req, res, next) => {
     try {
-        const {name, type, description, price, discount, stock, time} = req.body;
+        const { name, type, description, price, discount, stock, time } = req.body;
         const image = req.files.image.map(img => {
             return img.path;
         });
@@ -15,7 +15,7 @@ const addGoods = async (req, res, next) => {
             type,
             description,
             price,
-            discount,
+            discount: discount > 0 ? discount : null,
             stock,
             time
         }).save();
