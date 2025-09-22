@@ -38,6 +38,7 @@ const addHistory = async (req, res, next) => {
             type,
             amount,
             price,
+            discount,
             receive_status: false,
             check_out_time,
             service_time: {
@@ -58,7 +59,7 @@ const addHistory = async (req, res, next) => {
 
 const addCart = async (req, res, next) => {
     try {
-        const { product_name, product_id, product_type, amount, price, cart_image, date, hour } = req.body;
+        const { product_name, product_id, product_type, amount, price, cart_image, date, hour, discount } = req.body;
         
         const cart = {
             product_name,
@@ -70,7 +71,8 @@ const addCart = async (req, res, next) => {
             time: {
                 date,
                 hour
-            }
+            },
+            discount
         }
         
         const updatedCart = await User.findByIdAndUpdate(req.user.id, { $push: { cart } }, { new: true, runValidators: true });

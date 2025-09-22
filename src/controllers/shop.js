@@ -15,7 +15,7 @@ const addGoods = async (req, res, next) => {
             type,
             description,
             price,
-            discount: discount > 0 ? discount : null,
+            discount,
             stock,
             time
         }).save();
@@ -160,4 +160,18 @@ const deleteReview = async (req, res, next) => {
     }
 }
 
-module.exports = { addGoods, getGoods, getGoodsDataById, deleteGoodsData, editGoodsData, addReview, deleteReview };
+const onReduceStock = async (req, res, next) => {
+    try {
+        const { amount, goods_id } = req.params;
+        const goodsData = await Shop.findByIdAndUpdate(goods_id, { stock: stock - parseInt(amount) }, { new: true });
+
+        res.status(200).json({
+            message: "Stock has reduced",
+            goodsData
+        });
+    } catch(error) {
+        next(new AppError(error.message, 500));
+    }
+}
+
+module.exports = { addGoods, getGoods, getGoodsDataById, deleteGoodsData, editGoodsData, addReview, deleteReview, onReduceStock };
