@@ -41,6 +41,7 @@ const userSchema = new mongoose.Schema({
                 required: true
             },
             discount: {
+                type: Number,
                 required: true
             },
             receive_status: {
