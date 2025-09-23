@@ -30,7 +30,7 @@ const getMe = async (req, res, next) => {
 
 const addHistory = async (req, res, next) => {
     try {
-        const { name, goods_id, type, amount, date, hour, price, discount } = req.body;
+        const { name, goods_id, type, amount, date, hour, price } = req.body;
         const check_out_time = new Date().toLocaleString();
         const history = {
             name,
@@ -38,7 +38,6 @@ const addHistory = async (req, res, next) => {
             type,
             amount,
             price,
-            discount,
             receive_status: false,
             check_out_time,
             service_time: {
@@ -53,13 +52,13 @@ const addHistory = async (req, res, next) => {
             updatedUser
         })
     } catch(error) {
-        next(new AppError("History failed to update"))
+        next(new AppError("History failed to update", 500));
     }
 }
 
 const addCart = async (req, res, next) => {
     try {
-        const { product_name, product_id, product_type, amount, price, cart_image, date, hour, discount } = req.body;
+        const { product_name, product_id, product_type, amount, price, cart_image, date, hour } = req.body;
         
         const cart = {
             product_name,
@@ -72,7 +71,6 @@ const addCart = async (req, res, next) => {
                 date,
                 hour
             },
-            discount
         }
         
         const updatedCart = await User.findByIdAndUpdate(req.user.id, { $push: { cart } }, { new: true, runValidators: true });

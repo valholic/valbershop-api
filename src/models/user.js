@@ -40,10 +40,6 @@ const userSchema = new mongoose.Schema({
                 type: Number,
                 required: true
             },
-            discount: {
-                type: Number,
-                required: true
-            },
             receive_status: {
                 type: Boolean,
                 default: false,
@@ -88,11 +84,6 @@ const userSchema = new mongoose.Schema({
                 type: String,
                 required: true
             },
-            discount: {
-                type: Number,
-                required: true
-            }
-            ,
             time: {
                 type: Object,
                 required: function () {
