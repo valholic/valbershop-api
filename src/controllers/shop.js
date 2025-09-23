@@ -163,7 +163,9 @@ const deleteReview = async (req, res, next) => {
 const onReduceStock = async (req, res, next) => {
     try {
         const { amount, goods_id } = req.params;
-        const goodsData = await Shop.findByIdAndUpdate(goods_id, { stock: stock - parseInt(amount) }, { new: true });
+        const goodsData = await Shop.findByIdAndUpdate(goods_id, { $inc: {
+            stock: -parseInt(amount)
+        } }, { new: true });
 
         res.status(200).json({
             message: "Stock has reduced",
